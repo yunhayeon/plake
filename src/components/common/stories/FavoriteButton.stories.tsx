@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 
-import FavoriteButton from "./FavoriteButton";
+import FavoriteButton from "@/components/common/FavoriteButton";
 
 const meta: Meta<typeof FavoriteButton> = {
   title: "Common/FavoriteButton",
