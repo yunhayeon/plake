@@ -24,14 +24,10 @@ const Rating = ({
 }: IRatingProps) => {
   const ratingValues = useMemo(() => calculateRatingValues(rating), [rating]);
 
-  const handleRatingChange = useMemo(
-    () =>
-      createRatingHandler({
-        onRatingChange: onRatingChange ?? (() => {}),
-        isEditable,
-      }),
-    [isEditable, onRatingChange],
-  );
+  const handleRatingChange = createRatingHandler({
+    onRatingChange: onRatingChange ?? (() => {}),
+    isEditable,
+  });
 
   const { fullHearts, decimal, hasPartialHeart, emptyHearts } = ratingValues;
 
