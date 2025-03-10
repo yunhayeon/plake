@@ -32,7 +32,7 @@ export const getBoundingRect = (event: React.MouseEvent<HTMLDivElement>) => {
   return { rect, x };
 };
 
-export const calculateNewRating = (
+export const calculateHalfHeart = (
   x: number,
   width: number,
   baseIndex: number,
@@ -49,7 +49,7 @@ export const createRatingHandler = ({
     if (!isEditable || !onRatingChange) return;
 
     const { rect, x } = getBoundingRect(event);
-    const newRating = calculateNewRating(x, rect.width, baseIndex);
+    const newRating = calculateHalfHeart(x, rect.width, baseIndex);
     onRatingChange(newRating);
   };
 };

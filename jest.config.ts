@@ -19,7 +19,11 @@ const config: Config = {
 
   transformIgnorePatterns: ["/node_modules/"],
 
-  testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/__test__/**/*.[jt]s?(x)"],
+  testMatch: [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/__test__/**/*.[jt]s?(x)",
+    "**/tests/**/*.[jt]s?(x)",
+  ],
 
   clearMocks: true,
 };
