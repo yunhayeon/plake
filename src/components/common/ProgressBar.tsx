@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import { useEffect, useState } from "react";
 
 interface IProgressBarProps {
@@ -9,7 +8,11 @@ interface IProgressBarProps {
   width?: string;
 }
 
-const ProgressBar = ({ progress, color, width }: IProgressBarProps) => {
+const ProgressBar = ({
+  progress,
+  color = "#7c3aed",
+  width,
+}: IProgressBarProps) => {
   const [currentProgress, setCurrentProgress] = useState(0);
 
   useEffect(() => {
@@ -22,18 +25,16 @@ const ProgressBar = ({ progress, color, width }: IProgressBarProps) => {
 
   return (
     <div
-      className={clsx(
-        "relative h-1 overflow-hidden rounded-[6px] bg-gray-100",
-        width ? `w-[${width}px]` : "w-full",
-      )}
+      className="relative h-1 overflow-hidden rounded-[6px] bg-gray-100"
+      style={{ width: width ? `${width}px` : "100%" }}
     >
       <div
-        className={clsx(
-          "absolute left-0 top-0 h-full transition-all duration-1000 ease-in-out",
-          color ? `bg-[${color}]` : "bg-purple-600",
-          currentProgress ? `w-[${currentProgress}%]` : "w-0",
-        )}
-      ></div>
+        className="absolute left-0 top-0 h-full transition-all duration-1000 ease-in-out"
+        style={{
+          backgroundColor: color,
+          width: `${currentProgress}%`,
+        }}
+      />
     </div>
   );
 };
