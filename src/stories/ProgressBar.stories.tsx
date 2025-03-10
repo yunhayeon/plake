@@ -41,3 +41,11 @@ export const Default: Story = {
     ),
   ],
 };
+
+export const SmallWidth: Story = {
+  args: {
+    progress: 45,
+    width: "100",
+    color: "#FF5733",
+  },
+};
