@@ -4,8 +4,11 @@ import { useState } from "react";
 import FavoriteButton from "@/components/common/FavoriteButton";
 
 const meta: Meta<typeof FavoriteButton> = {
-  title: "Common/FavoriteButton",
+  title: "Components/Common/FavoriteButton",
   component: FavoriteButton,
+  parameters: {
+    layout: "centered",
+  },
   tags: ["autodocs"],
   argTypes: {
     isFavorite: {

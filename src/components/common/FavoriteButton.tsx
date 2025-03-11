@@ -6,10 +6,7 @@ interface FavoriteButtonProps {
   onToggle: () => void; // 찜 상태 변경 핸들러
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({
-  isFavorite,
-  onToggle,
-}) => {
+const FavoriteButton = ({ isFavorite, onToggle }: FavoriteButtonProps) => {
   return (
     <button
       className={clsx(
