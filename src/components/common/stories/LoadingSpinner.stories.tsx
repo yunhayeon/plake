@@ -12,8 +12,8 @@ const meta: Meta<typeof LoadingSpinner> = {
   argTypes: {
     size: {
       control: { type: "radio" },
-      options: ["sm", "md", "lg"],
-      description: "스피너 크기 선택 (sm: 24px, md: 32px, lg: 48px)",
+      options: ["xs", "sm", "md", "lg"],
+      description: "스피너 크기 선택 (xs: 16px sm: 24px, md: 32px, lg: 48px)",
     },
     color: {
       control: { type: "radio" },
@@ -28,21 +28,27 @@ type Story = StoryObj<typeof LoadingSpinner>;
 
 export const Default: Story = {
   args: {
-    size: "lg",
+    size: "md",
     color: "purple",
   },
 };
 
-export const MediumGray: Story = {
+export const ExtraSmall: Story = {
   args: {
-    size: "md",
+    size: "xs",
+  },
+};
+
+export const SmallGray: Story = {
+  args: {
+    size: "sm",
     color: "gray",
   },
 };
 
-export const Small: Story = {
+export const Large: Story = {
   args: {
-    size: "sm",
+    size: "lg",
   },
 };
 

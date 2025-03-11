@@ -1,11 +1,11 @@
 import clsx from "clsx";
 
 interface LoadingProps {
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   color?: "purple" | "gray" | "white";
 }
 
-const LoadingSpinner = ({ size = "lg", color = "purple" }: LoadingProps) => {
+const LoadingSpinner = ({ size = "md", color = "purple" }: LoadingProps) => {
   return (
     <div role="status" className="z-50 flex items-center justify-center">
       <svg
@@ -13,6 +13,7 @@ const LoadingSpinner = ({ size = "lg", color = "purple" }: LoadingProps) => {
         className={clsx(
           "animate-spin",
           {
+            "h-4 w-4": size === "xs",
             "h-6 w-6": size === "sm",
             "h-8 w-8": size === "md",
             "h-12 w-12": size === "lg",
