@@ -4,12 +4,17 @@ import dayjs from "dayjs";
 interface IDateTimeTagProps {
   type: "date" | "time";
   size?: "small" | "medium";
+  date?: Date;
 }
 
-const DateTimeTag = ({ type = "date", size = "medium" }: IDateTimeTagProps) => {
-  const now = dayjs();
-  const date = now.format("M월 DD일");
-  const time = now.format("HH:mm");
+const DateTimeTag = ({
+  type = "date",
+  size = "medium",
+  date,
+}: IDateTimeTagProps) => {
+  const currentDate = dayjs(date);
+  const dateText = currentDate.format("M월 DD일");
+  const timeText = currentDate.format("HH:mm");
 
   return (
     <div
@@ -20,7 +25,7 @@ const DateTimeTag = ({ type = "date", size = "medium" }: IDateTimeTagProps) => {
         size === "medium" && "px-2 text-sm",
       )}
     >
-      {type === "date" ? date : time}
+      {type === "date" ? dateText : timeText}
     </div>
   );
 };
