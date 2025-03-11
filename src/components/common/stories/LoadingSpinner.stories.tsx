@@ -12,17 +12,13 @@ const meta: Meta<typeof LoadingSpinner> = {
   argTypes: {
     size: {
       control: { type: "radio" },
-      options: ["sm", "md"],
-      description: "스피너 크기 선택 (sm: 24px, md: 48px)",
+      options: ["sm", "md", "lg"],
+      description: "스피너 크기 선택 (sm: 24px, md: 32px, lg: 48px)",
     },
     color: {
       control: { type: "radio" },
       options: ["purple", "gray", "white"],
       description: "스피너 색상 선택",
-    },
-    zIndex: {
-      control: { type: "number" },
-      description: "z-index 값 (기본: 20)",
     },
   },
 };
@@ -32,9 +28,15 @@ type Story = StoryObj<typeof LoadingSpinner>;
 
 export const Default: Story = {
   args: {
+    size: "lg",
+    color: "purple",
+  },
+};
+
+export const MediumGray: Story = {
+  args: {
     size: "md",
     color: "gray",
-    zIndex: 20,
   },
 };
 
@@ -44,17 +46,9 @@ export const Small: Story = {
   },
 };
 
-export const PurpleSpinner: Story = {
+export const WhiteSpinner: Story = {
   args: {
     size: "md",
-    color: "purple",
-  },
-};
-
-export const HighZIndex: Story = {
-  args: {
-    size: "md",
-    color: "gray",
-    zIndex: 50,
+    color: "white",
   },
 };
