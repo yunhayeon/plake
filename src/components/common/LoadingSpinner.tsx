@@ -1,11 +1,14 @@
 import clsx from "clsx";
 
-interface LoadingProps {
+interface LoadingSpinnerProps {
   size?: "xs" | "sm" | "md" | "lg";
   color?: "purple" | "gray" | "white";
 }
 
-const LoadingSpinner = ({ size = "md", color = "purple" }: LoadingProps) => {
+const LoadingSpinner = ({
+  size = "md",
+  color = "purple",
+}: LoadingSpinnerProps) => {
   return (
     <div role="status" className="z-50 flex items-center justify-center">
       <svg
