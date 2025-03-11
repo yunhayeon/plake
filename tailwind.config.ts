@@ -36,6 +36,9 @@ const config: Config = {
           950: "#030712",
         },
       },
+      fontFamily: {
+        sans: ["var(--font-pretendard)", "sans-serif"],
+      },
     },
   },
   plugins: [],
