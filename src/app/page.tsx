@@ -1,20 +1,8 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
-
-import Rating from "@/components/common/Rating";
 
 export default function Home() {
-  const [rating, setRating] = useState<number>(0);
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <Rating
-        rating={rating}
-        isEditable={true}
-        onRatingChange={newRating => setRating(newRating)}
-      />
-      <Rating rating={3.5} />
       <main className="row-start-2 flex flex-col items-center gap-8 sm:items-start">
         <Image
           className="dark:invert"
