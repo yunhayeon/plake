@@ -1,7 +1,7 @@
 import { ko } from "date-fns/locale";
 import { useState } from "react";
 
-import { CalendarProps } from "@/components/ui/calendar";
+import { CalendarProps } from "@/components/ui/Calendar";
 
 interface IUseCalendar {
   defaultDate?: Date;

@@ -21,7 +21,7 @@ const ProgressBar = ({
     }, 100);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [progress]);
 
   return (
     <div

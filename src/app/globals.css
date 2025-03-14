@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
 body {
   @apply font-sans;
+}
+.base-wrap {
+  @apply mx-auto max-w-[1200px] px-4 md:w-full xl:p-0;
+}
+.global-layout-wrapper {
+  @apply mt-[60px] border-b-[1px] border-gray-300 bg-gray-100;
+  min-height: calc(100vh - 110px);
 }
 
 @layer utilities {
@@ -11,8 +29,6 @@ body {
     text-wrap: balance;
   }
 }
-
-
 
 @layer base {
   :root {
@@ -69,8 +85,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {
