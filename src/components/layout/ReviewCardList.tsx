@@ -16,7 +16,7 @@ export const TempParentComponent = () => {
 
   return (
     <div>
-      <ReviewCardList reviews={data.pages.flat()} />
+      <ReviewCardList reviews={data.pages.flatMap(page => page.data)} />
     </div>
   );
 };

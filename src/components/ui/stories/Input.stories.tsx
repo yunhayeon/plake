@@ -12,16 +12,6 @@ const meta = {
       options: ["text", "password", "email", "number", "tel"],
       description: "입력 필드 타입",
     },
-    error: {
-      control: "radio",
-      options: [true, false],
-      description: "입력 필드의 오류 상태",
-    },
-    errorMsg: {
-      control: "text",
-
-      description: "입력 필드의 오류 메시지",
-    },
   },
   parameters: {
     layout: "centered",
@@ -51,7 +41,6 @@ export const Default: Story = {
     id: "text",
     label: "이름",
     placeholder: "이름을 입력해주세요",
-    errorMsg: "이름을 입력해주세요.",
   },
 };
 
@@ -70,7 +59,6 @@ export const Error: Story = {
     id: "text",
     label: "이름",
     placeholder: "이름을 입력해주세요",
-    error: true,
     errorMsg: "이름을 입력해주세요.",
   },
 };

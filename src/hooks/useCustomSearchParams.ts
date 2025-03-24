@@ -32,7 +32,11 @@ const useCustomSearchParams = () => {
     return router.push(`${pathname}?${setNewParams(_newParams)}`);
   };
 
-  return { searchParams: Object.fromEntries(searchParams), setSearchParams };
+  return {
+    searchParams: searchParams,
+    searchParamsObj: Object.fromEntries(searchParams),
+    setSearchParams,
+  };
 };
 
 export default useCustomSearchParams;

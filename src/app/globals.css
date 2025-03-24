@@ -17,10 +17,10 @@ body {
   @apply font-sans;
 }
 .base-wrap {
-  @apply mx-auto max-w-[1200px] px-4 md:w-full xl:p-0;
+  @apply mx-auto w-full max-w-[1200px] px-4 xl:px-0;
 }
 .global-layout-wrapper {
-  @apply mt-[60px] border-b-[1px] border-gray-300 bg-gray-100;
+  @apply mt-[60px] flex border-b-[1px] border-gray-300 bg-gray-100;
   min-height: calc(100vh - 110px);
 }
 

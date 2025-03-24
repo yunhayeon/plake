@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import dayjs from "dayjs";
 
 import DateTimeTag from "@/components/common/DateTimeTag";
 
@@ -29,7 +30,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     size: "medium",
-    date: new Date(),
+    date: dayjs(new Date()),
   },
   parameters: {
     docs: {
@@ -44,7 +45,7 @@ export const Default: Story = {
 export const Small: Story = {
   args: {
     size: "small",
-    date: new Date(),
+    date: dayjs(new Date()),
   },
   parameters: {
     docs: {

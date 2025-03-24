@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface IDateTimeTagProps {
   size?: "small" | "medium";
-  date: Date;
+  date: dayjs.Dayjs;
 }
 
 const baseStyle = (size: IDateTimeTagProps["size"]) =>
@@ -16,12 +16,11 @@ const baseStyle = (size: IDateTimeTagProps["size"]) =>
   );
 
 const DateTimeTag = ({ size = "medium", date }: IDateTimeTagProps) => {
-  const currentDate = dayjs(date);
-  const dateText = currentDate.format("M월 DD일");
-  const timeText = currentDate.format("HH:mm");
+  const dateText = date.format("M월 DD일");
+  const timeText = date.format("HH:mm");
 
   return (
-    <div className="flex gap-2" role="group" aria-label="날짜 및 시간">
+    <div className="flex gap-2">
       <time aria-label="날짜" className={clsx("text-black", baseStyle(size))}>
         {dateText}
       </time>

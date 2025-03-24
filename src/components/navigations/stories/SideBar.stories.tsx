@@ -7,20 +7,6 @@ const meta: Meta<typeof SideBar> = {
   title: "Components/Navigation/SideBar",
   component: SideBar,
   tags: ["autodocs"],
-  argTypes: {
-    isOpen: {
-      control: { type: "boolean" },
-      description: "사이드바 열림 여부",
-    },
-    onToggle: {
-      action: "clicked",
-      description: "사이드바 토글 핸들러",
-    },
-  },
-  args: {
-    isOpen: false,
-    onToggle: () => {},
-  },
   parameters: {
     componentSubtitle: "모바일 스크린에서 보여질 네비게이션 사이드바",
     docs: {
@@ -62,11 +48,9 @@ export const Interactive: Story = {
     },
   },
   render: () => {
-    const [isOpen, setIsOpen] = React.useState(false);
-
     return (
       <div>
-        <SideBar isOpen={isOpen} onToggle={() => setIsOpen(!isOpen)} />
+        <SideBar />
       </div>
     );
   },

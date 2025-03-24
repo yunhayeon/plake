@@ -1,6 +1,12 @@
 export interface IUser {
-  id: string;
+  teamId: number;
+  id: number;
+  email: string;
   name: string;
-  teamId: string;
-  image: string | null;
+  companyName: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export type IUpdateUser = Omit<IUser, "teamId">;

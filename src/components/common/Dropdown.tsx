@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
+import { LOCATION_OPTION } from "@/constants/ui";
 import { cn } from "@/lib/utils";
 
 interface IOption {
@@ -21,29 +22,17 @@ interface IDropdownProps {
   option?: Array<IOption>;
   placeholder?: string;
   type?: "default" | "sort" | "form";
-  onSelect?: () => void;
+  onSelect?: (value: string) => void;
 }
 
-const locationOption = [
-  { value: "all", label: "지역 전체" },
-  { value: "gangnam", label: "강남구" },
-  { value: "seocho", label: "서초구" },
-  { value: "gangbuk", label: "강북구" },
-  { value: "mapo", label: "마포구" },
-  { value: "yongsan", label: "용산구" },
-  { value: "guro", label: "구로구" },
-  { value: "gwanak", label: "관악구" },
-  { value: "yeongdeungpo", label: "영등포구" },
-];
-
 const Dropdown = ({
-  option = locationOption,
+  option = LOCATION_OPTION,
   placeholder,
   type = "default",
   onSelect,
 }: IDropdownProps) => {
   return (
-    <Select>
+    <Select onValueChange={onSelect}>
       <SelectTrigger
         className={cn(
           "min-w-[110px] justify-between rounded-xl bg-white",
@@ -61,8 +50,7 @@ const Dropdown = ({
           <SelectItem
             key={`option-${i}`}
             value={option.value}
-            className="h-[32px] rounded-xl px-2 py-1.5 pl-2 text-sm focus:bg-purple-100"
-            onClick={onSelect}
+            className="h-[32px] cursor-pointer rounded-xl px-2 py-1.5 pl-2 text-sm focus:bg-purple-100"
           >
             {option.label}
           </SelectItem>

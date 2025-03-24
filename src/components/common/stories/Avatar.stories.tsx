@@ -17,7 +17,7 @@ const meta = {
       options: ["default", "editable"],
       description: "아바타 타입",
     },
-    handleAvatar: {
+    onClickAvatar: {
       action: "clicked",
       description: "아바타 클릭 시 이벤트핸들러",
     },
@@ -49,7 +49,7 @@ export const Default: Story = {
     imgPath: "",
     size: "default",
     type: "default",
-    handleAvatar: () => {},
+    onClickAvatar: () => {},
   },
 };
 export const UserProfile: Story = {
@@ -64,6 +64,6 @@ export const UserProfile: Story = {
     imgPath: "https://picsum.photos/id/237/200/300",
     size: "default",
     type: "default",
-    handleAvatar: () => {},
+    onClickAvatar: () => {},
   },
 };

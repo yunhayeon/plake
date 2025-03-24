@@ -1,27 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { useShallow } from "zustand/shallow";
 
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/Sheet";
+import useSideBarStore from "@/stores/useSideBarStore";
+import useUserStore from "@/stores/useUserStore";
 
+import Avatar from "../common/Avatar";
 import NavList from "./NavList";
 
-interface ISideBarProps {
-  isOpen: boolean;
-  onToggle: () => void;
-}
-
-const SideBar = ({ isOpen, onToggle }: ISideBarProps) => {
+const SideBar = () => {
+  const { isOpen, onToggleSideBar } = useSideBarStore();
+  const { user } = useUserStore(useShallow(state => ({ user: state.user })));
   return (
-    <Sheet open={isOpen} onOpenChange={onToggle}>
-      <SheetTrigger onClick={onToggle}>
+    <Sheet open={isOpen} onOpenChange={onToggleSideBar}>
+      <SheetTrigger onClick={() => onToggleSideBar(!isOpen)}>
         <RxHamburgerMenu
           size={20}
           color="black"
@@ -31,18 +31,20 @@ const SideBar = ({ isOpen, onToggle }: ISideBarProps) => {
       <SheetContent side={"left"} className="w-[200px] bg-white p-4">
         <SheetHeader>
           <SheetTitle>
-            <Link href="/" onClick={onToggle}>
-              <Image
-                src="/images/logo.png"
-                alt="logo-image"
-                width={70}
-                height={15}
-              />
-            </Link>
+            <div className="flex items-center justify-between">
+              <Link href="/" onClick={() => onToggleSideBar(false)}>
+                <Image
+                  src="/images/logo.png"
+                  alt="logo-image"
+                  width={70}
+                  height={15}
+                />
+              </Link>
+              <Avatar type="default" size="default" imgPath={user?.image} />
+            </div>
           </SheetTitle>
-          <SheetDescription></SheetDescription>
         </SheetHeader>
-        <NavList onToggle={onToggle} />
+        <NavList />
       </SheetContent>
     </Sheet>
   );

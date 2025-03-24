@@ -10,7 +10,7 @@ type TReviewCardItemProps = {
 };
 
 // 내 리뷰 확인용 - 추후 삭제
-const tempUserId = "asdfdfer334";
+const tempUserId = 314;
 
 const ReviewCardItem = ({ review }: TReviewCardItemProps) => {
   const { comment, createdAt, score, User, Gathering } = review;

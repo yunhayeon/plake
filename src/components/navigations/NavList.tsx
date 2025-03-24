@@ -1,66 +1,101 @@
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useShallow } from "zustand/shallow";
 
+import { NAV_BUTTONS, NAV_ITEMS } from "@/constants/nav";
+import useLogout from "@/hooks/auth/useLogout";
 import { cn } from "@/lib/utils";
+import useSideBarStore from "@/stores/useSideBarStore";
+import useUserStore from "@/stores/useUserStore";
 
 import { Button } from "../ui/Button";
 
-interface INavListProps {
-  onToggle?: () => void;
-  activePath?: string;
+const NavButtonForMobile = () => {
+  const { onToggleSideBar } = useSideBarStore();
+  const { isLoggedIn } = useUserStore(
+    useShallow(state => ({ isLoggedIn: state.isLoggedIn })),
+  );
+  const { logout } = useLogout();
+
+  return (
+    <div className="mb-11 mt-4 flex items-center justify-between md:hidden">
+      {NAV_BUTTONS.filter(button => isLoggedIn === button.loggedInShow).map(
+        button => (
+          <Button
+            key={button.href}
+            size="sm"
+            className={clsx("w-20", {
+              "border-2": button.variant === "purple-outline",
+            })}
+            onClick={() => {
+              onToggleSideBar(false);
+              if (button.name === "로그아웃") logout();
+            }}
+            variant={button.variant}
+            asChild
+            aria-label={button.ariaLabel}
+          >
+            <Link href={button.href}>{button.name}</Link>
+          </Button>
+        ),
+      )}
+    </div>
+  );
+};
+
+interface INavItemProps {
+  isActive: (href: string) => boolean;
 }
 
-const NavList = ({ onToggle, activePath }: INavListProps) => {
+const NavItem = ({ isActive }: INavItemProps) => {
+  const { onToggleSideBar } = useSideBarStore();
+  const favoriteLength = [1, 2, 3, 4, 5].length; // 임시 찜한 모임 카운트 state
+
+  return (
+    <ul className="flex flex-col gap-6 font-semibold md:flex-row md:gap-10">
+      {NAV_ITEMS.map(item => (
+        <li key={item.href} className="relative">
+          <Link
+            onClick={() => onToggleSideBar(false)}
+            href={item.href}
+            className={cn(
+              "transition-colors hover:text-purple-600",
+              isActive(item.href)
+                ? "font-bold text-purple-600"
+                : "text-gray-700",
+            )}
+            aria-current={isActive(item.href) ? "page" : "false"}
+          >
+            {item.name}
+          </Link>
+          {item.href === "/favorites" && favoriteLength > 0 && (
+            <span className="absolute ml-[1.5px] rounded-3xl bg-purple-300 px-[6px] py-0 text-xs font-bold text-white">
+              {favoriteLength}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+interface INavListProps {
+  activePath?: string; // 스토리북 환경에서 테스트하기 위한 path prop
+}
+
+const NavList = ({ activePath }: INavListProps) => {
   const pathname = usePathname();
   const currentPath = activePath || pathname;
 
-  const navItems = [
-    { name: "모임 찾기", href: "/gathering" },
-    { name: "찜한 모임", href: "/favorites" },
-    { name: "모든 리뷰", href: "/all-reviews" },
-  ];
-
-  const isActive = (path: string) => {
+  const isActive = (path: string): boolean => {
     return currentPath.startsWith(path);
   };
 
   return (
     <nav>
-      <div className="mb-11 mt-4 flex items-center justify-between md:hidden">
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-20 border-2 border-purple-600 font-semibold text-purple-600 hover:text-purple-800"
-          onClick={onToggle}
-        >
-          로그인
-        </Button>
-        <Button
-          size="sm"
-          className="w-20 bg-purple-600 font-semibold text-white hover:bg-purple-800"
-          onClick={onToggle}
-        >
-          회원가입
-        </Button>
-      </div>
-      <ul className="flex flex-col gap-6 font-semibold md:flex-row md:gap-6">
-        {navItems.map(item => (
-          <li key={item.href}>
-            <Link
-              onClick={onToggle}
-              href={item.href}
-              className={cn(
-                "transition-colors hover:text-purple-600",
-                isActive(item.href)
-                  ? "font-bold text-purple-600"
-                  : "text-gray-700",
-              )}
-            >
-              {item.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <NavButtonForMobile />
+      <NavItem isActive={isActive} />
     </nav>
   );
 };

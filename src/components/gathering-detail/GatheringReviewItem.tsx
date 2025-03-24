@@ -16,7 +16,7 @@ const GatheringReviewItem = ({ review }: IGatheringReviewItemProps) => {
       <Rating rating={score} />
       <p className="text-sm font-medium text-gray-700">{comment}</p>
       <div className="flex items-center gap-2">
-        <Avatar type="default" size="small" imgPath={User.image ?? ""} />
+        <Avatar type="default" size="small" imgPath={User.image} />
         <p className="flex text-xs font-medium">
           <span className="text-gray-700 after:mx-[6px] after:text-gray-500 after:content-['|']">
             {User.name}

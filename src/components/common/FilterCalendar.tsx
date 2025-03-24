@@ -11,18 +11,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover";
+import useCustomSearchParams from "@/hooks/useCustomSearchParams";
 
 import { Calendar } from "../ui/Calendar";
 
 const FilterCalendar = () => {
+  const { setSearchParams } = useCustomSearchParams();
+
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date>(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const handleClick = (type?: string) => {
-    const formatDate = dayjs(date).format("YY/MM/DD");
+    const formatDate = dayjs(date).format("YYYY-MM-DD");
+    let value = "";
 
-    if (type === "reset") setDate(undefined);
+    if (type === "reset") {
+      setDate(new Date());
+      value = "";
+    } else {
+      value = formatDate;
+    }
+    setSearchParams({
+      date: value,
+    });
 
     setSelectedDate(type === "reset" ? null : formatDate);
     setIsCalendarOpen(false);

@@ -44,3 +44,9 @@ export const EmptyRating: Story = {
     isEditable: false,
   },
 };
+
+export const EditableRating: Story = {
+  args: {
+    isEditable: true,
+  },
+};

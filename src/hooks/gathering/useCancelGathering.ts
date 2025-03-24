@@ -1,52 +1,29 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import { APIError } from "@/types/error";
-
-const TOKEN = "token";
-
-const cancelGathering = async (id: string) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/gatherings/${id}/cancel`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-    },
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new APIError(data.message, data.code, response.status);
-  }
-
-  return data;
-};
+import gatheringService from "@/services/gathering/GatheringService";
+import useModalStore from "@/stores/useModalStore";
 
 export const useCancelGatheringMutation = (
   id: string,
   isOrganizer: boolean,
 ) => {
   const queryClient = useQueryClient();
+  const openAlert = useModalStore(state => state.openAlert);
 
   return useMutation({
-    mutationFn: () => {
-      return cancelGathering(id);
-    },
+    mutationFn: () => gatheringService.deleteGathering(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GATHERING.all],
       });
     },
     onError: () => {
-      // TODO: 알림 모달 적용하기
-      if (isOrganizer) {
-        window.confirm("취소에 실패했습니다.");
-      } else {
-        window.confirm("주최자가 아니면 취소할 수 없습니다.");
-      }
+      const errorMessage = isOrganizer
+        ? "잠시 후 다시 시도해주세요."
+        : "주최자가 아니면 취소할 수 없습니다.";
+      openAlert(errorMessage);
     },
   });
 };
@@ -56,12 +33,14 @@ export const useCancelGathering = (id: string, isOrganizer: boolean) => {
     id,
     isOrganizer,
   );
+  const openConfirm = useModalStore(state => state.openConfirm);
+  const router = useRouter();
 
   const handleCancelGathering = () => {
-    // TODO: 확인 모달 적용하기
-    if (window.confirm("정말 취소하시겠습니까?")) {
+    openConfirm("정말 취소하시겠습니까?", () => {
       cancelGathering();
-    }
+      router.push("/gatherings");
+    });
   };
 
   return { handleCancelGathering };

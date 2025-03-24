@@ -2,80 +2,65 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import { APIError } from "@/types/error";
+import gatheringService from "@/services/gathering/GatheringService";
+import useModalStore from "@/stores/useModalStore";
 
-const TOKEN = "token";
-
-export const joinGathering = async (
-  id: string,
-  type: "join" | "leave",
-  apiMethod: "POST" | "DELETE",
-) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/gatherings/${id}/${type}`,
-    {
-      method: apiMethod,
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-    },
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new APIError(data.message, data.code, response.status);
-  }
-
-  return data;
-};
-
-export const useJoinGatheringMutation = (
-  id: string,
-  currentUserId?: number,
-) => {
+export const useJoinGatheringMutation = (id: string) => {
   const queryClient = useQueryClient();
-  const router = useRouter();
-
+  const openAlert = useModalStore(state => state.openAlert);
   return useMutation({
-    mutationFn: () => joinGathering(id, "join", "POST"),
+    mutationFn: () => gatheringService.joinGathering(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GATHERING.detail(id)],
       });
     },
     onError: () => {
-      // TODO: 확인 모달 적용하기
-      if (!currentUserId) {
-        window.alert("로그인 후 참여할 수 있습니다.");
-        router.push("/login");
-      }
+      openAlert("잠시 후 다시 시도해주세요.");
     },
   });
 };
 
 export const useLeaveGatheringMutation = (id: string) => {
   const queryClient = useQueryClient();
+  const openAlert = useModalStore(state => state.openAlert);
 
   return useMutation({
-    mutationFn: () => joinGathering(id, "leave", "DELETE"),
+    mutationFn: () => gatheringService.leaveGathering(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GATHERING.detail(id)],
       });
     },
     onError: () => {
-      window.alert("참여 취소에 실패했습니다.");
+      openAlert("잠시 후 다시 시도해주세요.");
     },
   });
 };
 
-export const useJoinGathering = (id: string, currentUserId?: number) => {
-  const { mutate: handleJoinGathering } = useJoinGatheringMutation(
-    id,
-    currentUserId,
-  );
-  const { mutate: handleLeaveGathering } = useLeaveGatheringMutation(id);
+export const useJoinGathering = (id: string, currentUserId: number) => {
+  const { mutate: joinGathering } = useJoinGatheringMutation(id);
+  const { mutate: leaveGathering } = useLeaveGatheringMutation(id);
+  const openConfirm = useModalStore(state => state.openConfirm);
+  const router = useRouter();
+
+  const handleJoinGathering = () => {
+    if (!currentUserId) {
+      openConfirm("로그인 후 참여할 수 있습니다. 이동하시겠습니까?", () => {
+        router.push("/login");
+      });
+    } else {
+      openConfirm("모임에 참여하시겠습니까?", () => {
+        joinGathering();
+      });
+    }
+  };
+
+  const handleLeaveGathering = () => {
+    openConfirm("참여를 취소하시겠습니까?", () => {
+      leaveGathering();
+    });
+  };
 
   return {
     handleJoinGathering,

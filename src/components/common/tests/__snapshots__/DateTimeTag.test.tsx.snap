@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DateTimeTag 컴포넌트 테스트 size가 medium일 때 올바른 크기가 적용된다.  1`] = `
+<time
+  aria-label="날짜"
+  class="text-black flex items-center justify-center rounded-[4px] bg-purple-200 py-[2px] font-medium px-2 text-sm"
+>
+  3월 10일
+</time>
+`;
+
+exports[`DateTimeTag 컴포넌트 테스트 size가 medium일 때 올바른 크기가 적용된다.  2`] = `
+<time
+  aria-label="시간"
+  class="text-purple-600 flex items-center justify-center rounded-[4px] bg-purple-200 py-[2px] font-medium px-2 text-sm"
+>
+  12:34
+</time>
+`;
+
+exports[`DateTimeTag 컴포넌트 테스트 size가 small일 때 올바른 크기가 적용된다. 1`] = `
+<time
+  aria-label="날짜"
+  class="text-black flex items-center justify-center rounded-[4px] bg-purple-200 py-[2px] font-medium px-[6px] text-xs"
+>
+  3월 10일
+</time>
+`;
+
+exports[`DateTimeTag 컴포넌트 테스트 size가 small일 때 올바른 크기가 적용된다. 2`] = `
+<time
+  aria-label="시간"
+  class="text-purple-600 flex items-center justify-center rounded-[4px] bg-purple-200 py-[2px] font-medium px-[6px] text-xs"
+>
+  12:34
+</time>
+`;

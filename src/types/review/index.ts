@@ -4,9 +4,9 @@ import { IUser } from "../user";
 export interface IReview {
   Gathering: IGathering;
   User: IUser;
-  comment: string;
-  createdAt: string | Date;
-  id: string;
+  teamId: number;
+  id: number;
   score: number;
-  teamId: string;
+  comment: string;
+  createdAt: string;
 }
