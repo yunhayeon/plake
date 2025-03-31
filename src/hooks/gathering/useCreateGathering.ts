@@ -1,28 +1,37 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import { CreateGatheringFormType } from "@/schemas/gatheringSchema";
 import gatheringService from "@/services/gathering/GatheringService";
 import useModalStore from "@/stores/useModalStore";
 
 export const useCreateGathering = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const openAlert = useModalStore(state => state.openAlert);
 
   const { mutate: createGathering, isPending } = useMutation({
-    mutationFn: (data: CreateGatheringFormType) =>
-      gatheringService.createGathering(data),
-    onSuccess: () => {
+    mutationFn: async (data: FormData) => {
+      return gatheringService.createGathering(data);
+    },
+    onSuccess: async data => {
+      const gatheringId = data.id;
+
+      await gatheringService.joinGathering(gatheringId);
+
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GATHERING.all],
       });
+
+      router.push(`/gathering/detail/${gatheringId}`);
     },
-    onError: () => {
-      openAlert("잠시 후 다시 시도해주세요.");
+    onError: error => {
+      console.error("모임 생성 실패:", error);
+      openAlert("모임 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
     },
   });
 
-  const handleCreateGathering = (data: CreateGatheringFormType) => {
+  const handleCreateGathering = (data: FormData) => {
     createGathering(data);
   };
 

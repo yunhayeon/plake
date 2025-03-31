@@ -1,5 +1,5 @@
 import Rating from "@/components/common/Rating";
-import { IMainReview } from "@/constants/review";
+import { IMainReview } from "@/types/review/main-review";
 
 interface IMainReviewItemProps {
   review: IMainReview;

@@ -10,7 +10,7 @@ const FavoriteButton = ({ isFavorite, onToggle }: FavoriteButtonProps) => {
   return (
     <button
       className={clsx(
-        "flex h-12 w-12 items-center justify-center rounded-full outline-none",
+        "z-10 flex h-12 w-12 min-w-12 items-center justify-center rounded-full outline-none",
         isFavorite
           ? "bg-gray-100 text-purple-600"
           : "border-2 border-gray-200 text-gray-400 hover:text-purple-600",

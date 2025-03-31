@@ -10,7 +10,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover";
-import { useHydrateUserStore } from "@/hooks/auth/useHydrateUserStore";
 import useLogout from "@/hooks/auth/useLogout";
 import useUserStore from "@/stores/useUserStore";
 
@@ -51,15 +50,15 @@ const PopoverMenu = () => {
 };
 
 const Header = () => {
-  const isHydrating = useHydrateUserStore();
   const { isLoggedIn } = useUserStore(
     useShallow(state => ({ isLoggedIn: state.isLoggedIn })),
   );
+  const isHydrated = useUserStore(state => state.isHydrated);
 
   return (
     <header className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center justify-center bg-white md:justify-start">
       <SideBar />
-      <div className="base-wrap flex justify-between">
+      <div className="base-wrap flex items-center justify-center md:justify-between">
         <div className="flex items-center">
           <Link href="/" className="md:mr-16">
             <Image
@@ -73,8 +72,8 @@ const Header = () => {
             <NavList />
           </div>
         </div>
-        {isHydrating ? (
-          <div className="flex h-10 w-10 items-center justify-center">
+        {!isHydrated ? (
+          <div className="hidden h-10 w-10 items-center justify-center md:flex">
             <LoadingSpinner size="sm" />
           </div>
         ) : isLoggedIn ? (

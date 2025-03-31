@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/Button";
+
+import MainAnimation from "./animations/MainAnimation";
 
 interface IMainPromotionProps {
   type: "offline" | "online";
@@ -12,22 +13,16 @@ const MainPromotion = ({ type }: IMainPromotionProps) => {
   return (
     <section
       className={clsx(
-        "sm:[900px] flex h-[700px] w-full flex-col md:h-[450px]",
+        "flex w-full flex-col gap-16 md:gap-0",
         type === "offline" ? "md:flex-row" : "md:flex-row-reverse",
       )}
     >
-      <div className="relative flex-1 overflow-hidden rounded-2xl bg-gray-200">
-        <Image
-          src={
-            type === "offline"
-              ? "https://picsum.photos/500/700"
-              : "https://picsum.photos/500/700"
-          }
-          alt="promotion"
-          fill
-          className="object-cover"
-          sizes="80vw"
-        />
+      <div className="flex items-center justify-center overflow-hidden rounded-2xl md:h-[600px]">
+        {type === "offline" ? (
+          <MainAnimation type="offline" />
+        ) : (
+          <MainAnimation type="online" />
+        )}
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-14 whitespace-pre-wrap text-center text-3xl font-bold leading-10 md:text-4xl md:font-extrabold md:leading-[60px]">
         {type === "offline" ? (

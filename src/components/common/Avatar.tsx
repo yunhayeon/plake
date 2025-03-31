@@ -28,7 +28,10 @@ const Avatar = ({
   return (
     <div className="relative">
       <div
-        className="overflow-hidden rounded-full"
+        className={cn(
+          imgPath && "border border-gray-200 bg-white",
+          "overflow-hidden rounded-full",
+        )}
         style={{ width: selectedSize, height: selectedSize }}
         onClick={onClickAvatar}
         aria-label={`avatar-${type}`}

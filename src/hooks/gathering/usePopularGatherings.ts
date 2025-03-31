@@ -1,27 +1,15 @@
-import { QueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
+import { queryOptions } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import gatheringService from "@/services/gathering/GatheringService";
+import anonGatheringService from "@/services/gathering/AnonGatheringService";
 
-const popularGatheringsQueryOption = () => ({
-  queryKey: [QUERY_KEYS.GATHERING.popular],
-  queryFn: async () => {
-    const gatherings = await gatheringService.getGatheringList();
-    return gatherings
-      .filter(gathering =>
-        dayjs(gathering.registrationEnd).isAfter(dayjs(new Date())),
-      )
-      .sort((a, b) => b.participantCount - a.participantCount)
-      .slice(0, 10);
-  },
-  staleTime: 1000 * 60 * 5, // 5분
-});
-
-export const useSuspensePopularGatherings = () => {
-  return useSuspenseQuery(popularGatheringsQueryOption());
-};
-
-export const prefetchPopularGatherings = async (queryClient: QueryClient) => {
-  return queryClient.prefetchQuery(popularGatheringsQueryOption());
-};
+export const popularGatheringsQueryOption = () =>
+  queryOptions({
+    queryKey: [QUERY_KEYS.GATHERING.popular],
+    queryFn: () => {
+      return anonGatheringService.getGatheringList({
+        sortBy: "participantCount",
+        sortOrder: "desc",
+      });
+    },
+  });

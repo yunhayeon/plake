@@ -1,8 +1,8 @@
-import GatheringImage from "@/components/gathering-detail/GatheringImage";
-import GatheringDetailInformation from "@/components/gathering-detail/GatheringInformation";
 import GatheringImageSkeleton from "@/components/skeletons/gathering-detail/GatheringImageSkeleton";
 import GatheringInformationSkeleton from "@/components/skeletons/gathering-detail/GatheringInformationSkeleton";
 
+import GatheringDetailInformation from "./GatheringDetailInformation";
+import GatheringImage from "./GatheringImage";
 import GatheringInformationWrapper from "./GatheringInformationWrapper";
 
 interface IGatheringInformationProps {

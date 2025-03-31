@@ -14,7 +14,7 @@ const DateTimeAndEndTimePicker = ({
   setRegistrationEndValue,
 }: IDateTimeAndEndTimePickerProps) => {
   return (
-    <div className="relative flex w-full gap-2">
+    <section className="flex w-full gap-2">
       <DateTimePicker
         type="dateTime"
         dateTimeValue={dateTimeValue}
@@ -26,7 +26,7 @@ const DateTimeAndEndTimePicker = ({
         registrationEndValue={registrationEndValue}
         setRegistrationEndValue={setRegistrationEndValue}
       />
-    </div>
+    </section>
   );
 };
 

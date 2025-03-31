@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { IoCloseOutline } from "react-icons/io5";
 
 export interface ModalProps {
@@ -53,9 +54,9 @@ const Modal = ({
 
   if (!isOpen || !isMounted) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex min-w-[375px] items-center justify-center bg-black/50"
+      className="fixed inset-0 z-50 flex min-w-[320px] items-center justify-center bg-black/50"
       onClick={handleBackgroundClick}
     >
       <div
@@ -75,7 +76,9 @@ const Modal = ({
           )}
         >
           {title && (
-            <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+            <h2 className="text-base font-bold text-gray-900 md:text-lg">
+              {title}
+            </h2>
           )}
           <button className="text-gray-700" onClick={onClose}>
             <IoCloseOutline size={24} />
@@ -83,7 +86,8 @@ const Modal = ({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.getElementById("modal-root")!,
   );
 };
 

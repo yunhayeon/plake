@@ -12,7 +12,7 @@ import { IGathering } from "@/types/gathering";
 import MainCarouselItem from "./MainCarouselItem";
 
 interface IMainCarouselProps {
-  type: "popular" | "deadline";
+  type: "popular" | "upcoming";
   data: IGathering[];
 }
 
@@ -20,7 +20,7 @@ const MainCarousel = ({ type, data }: IMainCarouselProps) => {
   return (
     <section className="flex w-full flex-col gap-5">
       <p className="text-2xl font-bold text-gray-900">
-        {type === "popular" ? "현재 인기 많은 모임" : "마감 임박한 모임"}
+        {type === "popular" ? "현재 인기 많은 모임" : "곧 시작되는 모임"}
       </p>
       <div className="flex">
         <Swiper

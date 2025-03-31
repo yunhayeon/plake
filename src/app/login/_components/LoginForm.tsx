@@ -99,7 +99,7 @@ const LoginForm = () => {
 
   const debouncedValidation = useDebounce(fieldName => {
     trigger(fieldName);
-  }, 1000);
+  }, 500);
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">

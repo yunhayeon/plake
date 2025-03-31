@@ -1,45 +1,74 @@
-import { CreateGatheringFormType } from "@/schemas/gatheringSchema";
-import Service from "@/services/Service";
-import { IGathering } from "@/types/gathering";
+import { IMyGathering, IMyGatheringFilterParams } from "@/types/gathering";
 
-class GatheringService extends Service {
-  constructor() {
-    super();
-    this.setToken("");
+class GatheringService {
+  async createGathering(formData: FormData) {
+    const res = await fetch("/api/gatherings", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw await res.json();
+    return res.json();
   }
 
-  getGatheringList(type?: string, params?: string) {
-    const isOnline = type === "online";
-    const onlineFilter = isOnline ? "?location=홍대입구" : "";
-    const filterParams = isOnline ? onlineFilter + `&${params}` : `?${params}`;
+  async joinGathering(id: string) {
+    const res = await fetch(`/api/gatherings/${id}/join`, {
+      method: "POST",
+    });
 
-    if (isOnline && !params)
-      return this.http.get<IGathering[]>(`/gatherings${onlineFilter}`);
+    if (!res.ok) throw await res.json();
+    return res.json;
+  }
 
-    if (params)
-      return this.http.get<IGathering[]>(`/gatherings${filterParams}`);
+  async deleteGathering(id: string) {
+    const res = await fetch(`/api/gatherings/${id}/cancel`, {
+      method: "PUT",
+    });
 
-    return this.http.get<IGathering[]>(`/gatherings`);
+    if (!res.ok) throw await res.json();
+    return res.json();
   }
-  getGatheringDetail(id: string) {
-    const data = this.http.get<IGathering>(`/gatherings/${id}`);
-    return data;
+
+  async leaveGathering(id: string) {
+    const res = await fetch(`/api/gatherings/${id}/leave`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) throw await res.json();
+    return res.json();
   }
-  createGathering(formData: CreateGatheringFormType) {
-    const data = this.http.post("/gatherings", formData);
-    return data;
-  }
-  deleteGathering(id: string) {
-    const data = this.http.put(`/gatherings/${id}/cancel`);
-    return data;
-  }
-  joinGathering(id: string) {
-    const data = this.http.post(`/gatherings/${id}/join`);
-    return data;
-  }
-  leaveGathering(id: string) {
-    const data = this.http.delete(`/gatherings/${id}/leave`);
-    return data;
+
+  async getMyGatheringList(searchParams?: IMyGatheringFilterParams) {
+    const paramStr = new URLSearchParams(
+      (searchParams ?? {}) as Record<string, string>,
+    ).toString();
+    const baseURL = process.env.NEXT_PUBLIC_SITE_URL;
+    const url = `/api/gatherings/joined${paramStr && `?${paramStr}`}`;
+
+    const header = new Headers();
+    let res: Response;
+    if (typeof window === "undefined") {
+      await import("next/headers").then(({ cookies }) => {
+        const _cookies = cookies().getAll();
+        const cookieArr = _cookies
+          .map(cookie => `${cookie.name}=${cookie.value}`)
+          .join("; ");
+        header.set("Cookie", cookieArr);
+      });
+      res = await fetch(`${baseURL}${url}`, {
+        method: "GET",
+        credentials: "include",
+        headers: header,
+      });
+    } else {
+      res = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+    }
+
+    if (!res.ok) throw await res.json();
+    return res.json() as Promise<IMyGathering[]>;
   }
 }
 

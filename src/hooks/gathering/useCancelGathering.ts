@@ -1,45 +1,39 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useShallow } from "zustand/shallow";
 
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import gatheringService from "@/services/gathering/GatheringService";
 import useModalStore from "@/stores/useModalStore";
 
-export const useCancelGatheringMutation = (
-  id: string,
-  isOrganizer: boolean,
-) => {
+export const useCancelGathering = (id: string) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const openAlert = useModalStore(state => state.openAlert);
+  const { openAlert, openConfirm } = useModalStore(
+    useShallow(state => ({
+      openAlert: state.openAlert,
+      openConfirm: state.openConfirm,
+    })),
+  );
 
-  return useMutation({
-    mutationFn: () => gatheringService.deleteGathering(id),
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      return gatheringService.deleteGathering(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GATHERING.all],
       });
+      router.push("/gathering/offline");
     },
     onError: () => {
-      const errorMessage = isOrganizer
-        ? "잠시 후 다시 시도해주세요."
-        : "주최자가 아니면 취소할 수 없습니다.";
-      openAlert(errorMessage);
+      openAlert("잠시 후 다시 시도해주세요.");
     },
   });
-};
-
-export const useCancelGathering = (id: string, isOrganizer: boolean) => {
-  const { mutate: cancelGathering } = useCancelGatheringMutation(
-    id,
-    isOrganizer,
-  );
-  const openConfirm = useModalStore(state => state.openConfirm);
-  const router = useRouter();
 
   const handleCancelGathering = () => {
     openConfirm("정말 취소하시겠습니까?", () => {
-      cancelGathering();
-      router.push("/gatherings");
+      mutate();
     });
   };
 

@@ -22,6 +22,7 @@ interface IDropdownProps {
   option?: Array<IOption>;
   placeholder?: string;
   type?: "default" | "sort" | "form";
+  defaultValue?: string;
   onSelect?: (value: string) => void;
 }
 
@@ -29,10 +30,15 @@ const Dropdown = ({
   option = LOCATION_OPTION,
   placeholder,
   type = "default",
+  defaultValue,
   onSelect,
 }: IDropdownProps) => {
   return (
-    <Select onValueChange={onSelect}>
+    <Select
+      onValueChange={onSelect}
+      defaultValue={defaultValue}
+      value={defaultValue}
+    >
       <SelectTrigger
         className={cn(
           "min-w-[110px] justify-between rounded-xl bg-white",

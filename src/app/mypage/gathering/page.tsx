@@ -1,11 +1,31 @@
-import EmptyState from "@/app/mypage/_components/EmptyState";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-const Page = () => {
+import MyCreateCardList from "@/app/mypage/_components/my-card-list/MyCreateCardList";
+import FetchBoundary from "@/components/boundary/FetchBoundary";
+import LoadingDots from "@/components/common/LoadingDots";
+import { prefetchCheckUser } from "@/hooks/auth/useCheckUser";
+import { prefetchGateringInfiniteList } from "@/hooks/gathering/useGatheringInfiniteList";
+
+const Page = async () => {
+  const queryClient = new QueryClient();
+
+  const { userId } = await prefetchCheckUser(queryClient);
+
+  await prefetchGateringInfiniteList(queryClient, "all", {
+    createdBy: userId,
+    sortOrder: "desc",
+  });
+
   return (
-    <>
-      {/* 추가 예정 */}
-      <EmptyState message="아직 만든 모임이 없어요" />
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <FetchBoundary fallback={<LoadingDots />}>
+        <MyCreateCardList userId={userId} />
+      </FetchBoundary>
+    </HydrationBoundary>
   );
 };
 

@@ -9,7 +9,9 @@ export const useJoinGatheringMutation = (id: string) => {
   const queryClient = useQueryClient();
   const openAlert = useModalStore(state => state.openAlert);
   return useMutation({
-    mutationFn: () => gatheringService.joinGathering(id),
+    mutationFn: async () => {
+      return gatheringService.joinGathering(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GATHERING.detail(id)],
@@ -21,15 +23,20 @@ export const useJoinGatheringMutation = (id: string) => {
   });
 };
 
-export const useLeaveGatheringMutation = (id: string) => {
+export const useLeaveGatheringMutation = (
+  id: string,
+  invalidateKey?: unknown[],
+) => {
   const queryClient = useQueryClient();
   const openAlert = useModalStore(state => state.openAlert);
 
   return useMutation({
-    mutationFn: () => gatheringService.leaveGathering(id),
+    mutationFn: async () => {
+      return gatheringService.leaveGathering(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GATHERING.detail(id)],
+        queryKey: invalidateKey ?? [QUERY_KEYS.GATHERING.detail(id)],
       });
     },
     onError: () => {
@@ -38,7 +45,7 @@ export const useLeaveGatheringMutation = (id: string) => {
   });
 };
 
-export const useJoinGathering = (id: string, currentUserId: number) => {
+export const useJoinGathering = (id: string, currentUserId?: number) => {
   const { mutate: joinGathering } = useJoinGatheringMutation(id);
   const { mutate: leaveGathering } = useLeaveGatheringMutation(id);
   const openConfirm = useModalStore(state => state.openConfirm);

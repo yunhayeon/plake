@@ -4,7 +4,7 @@ import MainReviewContent from "./MainReviewContent";
 
 const MainContent = () => {
   return (
-    <div className="base-wrap mb-20 flex flex-col gap-32">
+    <div className="base-wrap mb-20 flex flex-col gap-40">
       <MainCarouselContainer />
       <MainPromotionContainer />
       <MainReviewContent />

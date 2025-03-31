@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import FetchBoundary from "@/components/boundary/FetchBoundary";
 import MainCardList from "@/components/layout/MainCardList";
 import MainCardListSkeleton from "@/components/skeletons/MainCardListSkeleton";
-import { prefetchGateringList } from "@/hooks/gathering/useGatheringList";
+// import { prefetchGateringInfiniteList } from "@/hooks/gathering/useGatheringInfiniteList";
 import { MainTab, MainTabSchema } from "@/types/gathering/main-tab";
 
 type PageProps = {
@@ -28,12 +28,13 @@ const Page = async ({ params }: PageProps) => {
     notFound();
   }
 
-  await prefetchGateringList(queryClient, tab);
+  //수정 예정
+  //await prefetchGateringInfiniteList(queryClient, tab);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <FetchBoundary fallback={<MainCardListSkeleton />}>
-        <MainCardList />
+        <MainCardList tab={tab} />
       </FetchBoundary>
     </HydrationBoundary>
   );

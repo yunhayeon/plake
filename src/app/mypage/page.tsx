@@ -1,11 +1,13 @@
-import EmptyState from "@/app/mypage/_components/EmptyState";
+import MyCardList from "@/app/mypage/_components/my-card-list/MyCardList";
+import FetchBoundary from "@/components/boundary/FetchBoundary";
+import LoadingDots from "@/components/common/LoadingDots";
 
-const Page = () => {
+const Page = async () => {
   return (
-    <>
-      {/* 추가 예정 */}
-      <EmptyState message="신청한 모임이 아직 없어요" />
-    </>
+    // TODO: MyCardSkeleton Component 제작 및 적용
+    <FetchBoundary fallback={<LoadingDots />}>
+      <MyCardList />
+    </FetchBoundary>
   );
 };
 

@@ -3,19 +3,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 interface ImageUploaderProps {
-  setValue: (value: FormData) => void;
+  setValue: (value: File) => void;
 }
 
 const ImageUploader = ({ setValue }: ImageUploaderProps) => {
-  const [fileName, setFileName] = useState<string>();
+  const [fileName, setFileName] = useState<string>("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("image", file);
-    setValue(formData);
+    setValue(file);
     setFileName(file.name);
   };
 
@@ -36,6 +34,7 @@ const ImageUploader = ({ setValue }: ImageUploaderProps) => {
         onChange={handleImageChange}
       />
       <Button
+        type="button"
         variant="purple-outline"
         onClick={() => document.getElementById("image-file")?.click()}
       >

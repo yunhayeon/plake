@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import { useShallow } from "zustand/shallow";
 
@@ -17,9 +19,11 @@ const ConfirmAlertModal = () => {
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} variant="alert">
       <div className="flex w-full flex-col items-center gap-6">
-        <p className="font-medium text-gray-900">{title}</p>
+        <p className="text-sm font-medium text-gray-900 md:text-base">
+          {title}
+        </p>
         <div
           className={clsx(
             "flex w-full gap-2",

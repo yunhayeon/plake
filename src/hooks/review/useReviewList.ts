@@ -1,31 +1,50 @@
 import {
+  infiniteQueryOptions,
   QueryClient,
-  useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import { ReviewResponse, reviewService } from "@/services/review/ReviewService";
+import anonReviewService from "@/services/review/AnonReviewService";
+import { IReviewResponse, TReviewQueryParams } from "@/types/review";
 
-const reviewListQueryOption = () => ({
-  queryKey: [QUERY_KEYS.REVIEW.list],
-  queryFn: reviewService.getReviewList,
-  initialPageParam: 1,
-  throwOnError: true,
-  retry: false,
-  getNextPageParam: (lastPage: ReviewResponse) => {
-    return lastPage.data.length === 0 ? undefined : lastPage.data.length + 1;
-  },
-});
+const initialPageParam = "0";
 
-export const useReviewList = () => {
-  return useInfiniteQuery(reviewListQueryOption());
+const reviewListQueryOption = (searchParams?: TReviewQueryParams) =>
+  infiniteQueryOptions({
+    queryKey: [QUERY_KEYS.REVIEW.listByQueryParams(searchParams)],
+    queryFn: ({ pageParam = initialPageParam }) => {
+      const mergedParams = {
+        ...searchParams,
+        offset: pageParam,
+      };
+
+      return anonReviewService.getReviewList(mergedParams);
+    },
+    initialPageParam,
+    getNextPageParam: (
+      lastPage: IReviewResponse,
+      allPages: IReviewResponse[],
+    ) => {
+      if (
+        lastPage.data.length === 0 ||
+        allPages.length >= lastPage.totalPages
+      ) {
+        return undefined;
+      }
+
+      const currentOffset = allPages.length * 10;
+      return currentOffset.toString();
+    },
+  });
+
+export const useSuspenseReviewList = (searchParams?: TReviewQueryParams) => {
+  return useSuspenseInfiniteQuery(reviewListQueryOption(searchParams));
 };
 
-export const useSuspenseReviewList = () => {
-  return useSuspenseInfiniteQuery(reviewListQueryOption());
-};
-
-export const prefetchReviewList = (queryClient: QueryClient) => {
-  return queryClient.prefetchInfiniteQuery(reviewListQueryOption());
+export const prefetchReviewList = (
+  queryClient: QueryClient,
+  searchParams?: TReviewQueryParams,
+) => {
+  return queryClient.prefetchInfiniteQuery(reviewListQueryOption(searchParams));
 };

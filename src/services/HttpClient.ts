@@ -8,7 +8,6 @@ interface HTTPInstance {
 class HttpClient implements HTTPInstance {
   private static instance: HttpClient;
   private baseURL: string;
-  public token?: string;
 
   constructor() {
     this.baseURL = `${process.env.NEXT_PUBLIC_API_URL}`;
@@ -21,10 +20,6 @@ class HttpClient implements HTTPInstance {
     return HttpClient.instance;
   }
 
-  public setToken(token: string) {
-    this.token = token;
-  }
-
   private async request<R = unknown>(
     method: string,
     url: string,
@@ -34,10 +29,6 @@ class HttpClient implements HTTPInstance {
     try {
       const isFormData = data instanceof FormData;
       const headers = new Headers(config?.headers);
-
-      if (this.token) {
-        headers.set("Authorization", `Bearer ${this.token}`);
-      }
 
       if (!isFormData) {
         headers.set("Content-Type", "application/json");
@@ -55,6 +46,7 @@ class HttpClient implements HTTPInstance {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
       return responseData;
     } catch (error) {
       console.error("[Error]", method, url, error);

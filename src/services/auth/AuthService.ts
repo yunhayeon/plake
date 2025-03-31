@@ -1,46 +1,44 @@
-import { TJoinForm } from "@/app/join/_components/JoinForm";
-import { TLoginForm } from "@/app/login/_components/LoginForm";
-import { IUpdateUser } from "@/types/user";
-import { getCookieOfToken } from "@/utils/cookieToken";
+class AuthService {
+  async getUser() {
+    const baseURL = process.env.NEXT_PUBLIC_SITE_URL;
 
-import Service from "../Service";
+    const header = new Headers();
+    let res: Response;
+    if (typeof window === "undefined") {
+      await import("next/headers").then(({ cookies }) => {
+        const _cookies = cookies().getAll();
+        const cookieArr = _cookies
+          .map(cookie => `${cookie.name}=${cookie.value}`)
+          .join("; ");
+        header.set("Cookie", cookieArr);
+      });
+      res = await fetch(`${baseURL}/api/auths/user`, {
+        method: "GET",
+        credentials: "include",
+        headers: header,
+      });
+    } else {
+      res = await fetch("/api/auths/user", {
+        method: "GET",
+        credentials: "include",
+      });
+    }
 
-class AuthService extends Service {
-  constructor(token?: string) {
-    super();
-    this.setToken(token || "");
+    if (!res.ok) throw await res.json();
+    return res.json();
   }
 
-  login(formData: TLoginForm) {
-    const data = this.http.post("/auths/signin", formData);
-    return data;
-  }
+  async updateUser(formData: FormData) {
+    const res = await fetch("/api/auths/user", {
+      method: "PUT",
+      body: formData,
+    });
 
-  join(formData: TJoinForm) {
-    const data = this.http.post("/auths/signup", formData);
-    return data;
-  }
-
-  getUser() {
-    const data = this.http.get("/auths/user");
-    return data;
-  }
-
-  updateUser(formData: FormData) {
-    const data = this.http.put<IUpdateUser>("/auths/user", formData);
-    return data;
+    if (!res.ok) throw await res.json();
+    return res.json();
   }
 }
 
-export async function createAuthService() {
-  const token = await getCookieOfToken();
-  return new AuthService(token);
-}
+const authService = new AuthService();
 
-/*
-사용 예시
-import { createAuthService } from "@/services/auth/AuthService";
-
-const authService = await createAuthService();
-const user = await authService.login(userData);
-*/
+export default authService;

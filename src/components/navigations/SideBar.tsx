@@ -6,6 +6,7 @@ import { useShallow } from "zustand/shallow";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -45,6 +46,7 @@ const SideBar = () => {
           </SheetTitle>
         </SheetHeader>
         <NavList />
+        <SheetDescription>{""}</SheetDescription>
       </SheetContent>
     </Sheet>
   );

@@ -1,7 +1,7 @@
 export const NAV_ITEMS = [
   { name: "모임 찾기", href: "/gathering/offline" },
   { name: "찜한 모임", href: "/favorites" },
-  { name: "모든 리뷰", href: "/all-reviews" },
+  { name: "모든 리뷰", href: "/all-reviews/offline" },
 ] as const;
 
 export const NAV_BUTTONS = [

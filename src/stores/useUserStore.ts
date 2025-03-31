@@ -35,6 +35,10 @@ const useUserStore = create<State<IUser> & Action>()(
         user: state.user,
         isLoggedIn: state.isLoggedIn,
       }),
+      // Hydrate 이벤트 발생 시 isHydrated를 true로 변경
+      onRehydrateStorage: state => {
+        return () => state.setHydrated(true);
+      },
     },
   ),
 );

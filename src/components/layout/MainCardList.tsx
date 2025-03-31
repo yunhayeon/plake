@@ -2,23 +2,32 @@
 
 import { usePathname } from "next/navigation";
 
-import { ONLINE_TAB } from "@/constants/gathering";
-import useConvertToQueryStr from "@/hooks/gathering/useConvertToQueryStr";
-import { useGatheringList } from "@/hooks/gathering/useGatheringList";
+import { useSuspenseGatheringInfiniteList } from "@/hooks/gathering/useGatheringInfiniteList";
 import useCustomSearchParams from "@/hooks/useCustomSearchParams";
+import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import { updateGatheringParams } from "@/utils/gatheringFilterParams";
 
 import MainCardItem from "./MainCardItem";
 
-const MainCardList = () => {
+interface IMainCardListProps {
+  tab: string;
+}
+
+const MainCardList = ({ tab }: IMainCardListProps) => {
   const pathname = usePathname();
-
   const { searchParamsObj } = useCustomSearchParams();
-  const params = useConvertToQueryStr(searchParamsObj);
+  const params = updateGatheringParams(pathname, searchParamsObj);
 
-  const { data } = useGatheringList(
-    pathname === ONLINE_TAB ? "online" : "offline",
-    params,
-  );
+  const { data, status, hasNextPage, fetchNextPage } =
+    useSuspenseGatheringInfiniteList(tab, params);
+
+  const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
+    if (isIntersecting && hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  const { setTarget } = useIntersectionObserver({ onIntersect });
 
   return (
     <div className="mb-8 flex flex-col items-center justify-center gap-6">
@@ -26,7 +35,7 @@ const MainCardList = () => {
         page.map(card => (
           <MainCardItem
             key={card.id}
-            id={card.id}
+            id={String(card.id)}
             name={card.name}
             dateTime={new Date(card.dateTime)}
             registrationEnd={new Date(card.registrationEnd)}
@@ -37,6 +46,11 @@ const MainCardList = () => {
             firstPage={pageNum === 0}
           />
         )),
+      )}
+      {status === "error" ? (
+        <div>{"에러가 발생했습니다."}</div>
+      ) : (
+        <div ref={setTarget}></div>
       )}
     </div>
   );

@@ -15,29 +15,39 @@ import useCustomSearchParams from "@/hooks/useCustomSearchParams";
 
 import { Calendar } from "../ui/Calendar";
 
-const FilterCalendar = () => {
+interface IFilterCalendarProps {
+  selectedDate: string | null;
+  setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
+  disableType?: "afterToday" | undefined;
+}
+
+const FilterCalendar = ({
+  selectedDate,
+  setSelectedDate,
+  disableType,
+}: IFilterCalendarProps) => {
   const { setSearchParams } = useCustomSearchParams();
 
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  const handleClick = (type?: string) => {
+  const onClickDate = (type?: string) => {
     const formatDate = dayjs(date).format("YYYY-MM-DD");
+    const isReset = type === "reset";
     let value = "";
 
-    if (type === "reset") {
+    if (isReset) {
       setDate(new Date());
       value = "";
     } else {
       value = formatDate;
     }
+    setSelectedDate(isReset ? null : formatDate);
+    setIsCalendarOpen(false);
+
     setSearchParams({
       date: value,
     });
-
-    setSelectedDate(type === "reset" ? null : formatDate);
-    setIsCalendarOpen(false);
   };
 
   return (
@@ -62,9 +72,7 @@ const FilterCalendar = () => {
             mode="single"
             selected={date}
             onDayClick={setDate}
-            disabled={date =>
-              date > new Date() || date < new Date("1900-01-01")
-            }
+            fromDate={disableType === "afterToday" ? new Date() : undefined}
             initialFocus
             locale={ko}
           />
@@ -72,18 +80,14 @@ const FilterCalendar = () => {
             <Button
               variant={"purple-outline"}
               className="h-[40px] w-[118px]"
-              onClick={() => {
-                handleClick("reset");
-              }}
+              onClick={() => onClickDate("reset")}
             >
               초기화
             </Button>
             <Button
               variant={"purple"}
               className="h-[40px] w-[118px]"
-              onClick={() => {
-                handleClick();
-              }}
+              onClick={() => onClickDate()}
             >
               적용
             </Button>

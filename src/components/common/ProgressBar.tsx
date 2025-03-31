@@ -16,11 +16,11 @@ const ProgressBar = ({
   const [currentProgress, setCurrentProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const frameId = requestAnimationFrame(() => {
       setCurrentProgress(progress);
-    }, 100);
+    });
 
-    return () => clearInterval(interval);
+    return () => cancelAnimationFrame(frameId);
   }, [progress]);
 
   return (

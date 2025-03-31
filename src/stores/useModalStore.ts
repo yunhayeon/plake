@@ -1,15 +1,17 @@
 import { create } from "zustand";
 
 interface ModalStore {
-  type: "alert" | "confirm" | "createGathering";
+  type: "alert" | "confirm" | "createGathering" | "createReview";
   title: string;
   isOpen: boolean;
+  reviewTargetId?: number;
   onOpen: () => void;
   onClose: () => void;
   onConfirm: (callback?: () => void) => void;
   openAlert: (title: string) => void;
   openConfirm: (title: string, onConfirmCallback: () => void) => void;
   openCreateGathering: () => void;
+  openCreateReview: (id: number) => void;
 }
 
 const useModalStore = create<ModalStore>(set => ({
@@ -48,6 +50,13 @@ const useModalStore = create<ModalStore>(set => ({
       type: "createGathering",
       title: "",
       isOpen: true,
+    })),
+  openCreateReview: (id: number) =>
+    set(() => ({
+      type: "createReview",
+      title: "",
+      isOpen: true,
+      reviewTargetId: id,
     })),
 }));
 

@@ -1,44 +1,13 @@
 import "./globals.css";
 
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 
+import TokenValidator from "@/components/auth/TokenValidator";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import ModalProvider from "@/components/providers/ModalProvider";
 import QueryProvider from "@/components/providers/QueryProvider";
-
-const pretendard = localFont({
-  src: [
-    {
-      path: "../assets/fonts/Pretendard-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../assets/fonts/Pretendard-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../assets/fonts/Pretendard-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../assets/fonts/Pretendard-SemiBold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../assets/fonts/Pretendard-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  display: "swap",
-  variable: "--font-pretendard",
-});
+import { FONT } from "@/constants/font";
 
 export const metadata: Metadata = {
   title: "PLAKE",
@@ -53,15 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${pretendard.variable} antialiased`}
-        suppressHydrationWarning
-      >
+      <body className={`${FONT.variable} antialiased`} suppressHydrationWarning>
         <QueryProvider>
           <Header />
           <main className="global-layout-wrapper">{children}</main>
           <Footer />
           <ModalProvider />
+          <TokenValidator />
         </QueryProvider>
         <aside id="modal-root" />
       </body>

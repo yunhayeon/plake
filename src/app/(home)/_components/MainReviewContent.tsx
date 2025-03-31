@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { reviewList } from "@/constants/review";
+import { mainReviewList } from "@/constants/review";
 
 import MainReviewItem from "./MainReviewItem";
 
@@ -14,7 +14,7 @@ const MainReviewContent = () => {
         </p>
       </div>
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-        {reviewList.map(review => (
+        {mainReviewList.map(review => (
           <MainReviewItem key={review.id} review={review} />
         ))}
       </div>

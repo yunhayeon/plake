@@ -64,7 +64,7 @@ export const WithClearDate: Story = {
 export const WithDateChange: Story = {
   render: () => {
     const { calendarProps, selectDate } = useCalendar();
-    const [date, setDate] = useState<Date | undefined>(undefined);
+    const [date, setDate] = useState<Date>(new Date());
 
     return (
       <div className="flex flex-col gap-4">

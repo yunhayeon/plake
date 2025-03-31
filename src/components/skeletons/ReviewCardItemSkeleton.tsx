@@ -24,8 +24,6 @@ const ReviewCardItemSkeleton = () => {
             <Skeleton className="h-4 w-16 rounded-full" />
             <Skeleton className="h-4 w-16 rounded-full" />
           </div>
-
-          <hr className="border-b-2 border-dashed border-gray-200" />
         </div>
       </div>
     </article>
